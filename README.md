@@ -1,4 +1,4 @@
-#📌 Learning Data Structures in C++
+# 📌 Learning Data Structures in C++
 
 📖 This repository contains my learning journey in Data Structures using C++.
 
