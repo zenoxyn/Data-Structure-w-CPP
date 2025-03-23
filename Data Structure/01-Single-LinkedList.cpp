@@ -2,145 +2,189 @@
 
 using namespace std;
 
+// Make a Node Struct for Single Linked List
+// Node has 2 attributes, data and next
+// data is the value of the node
+// next is the pointer to the next node
+// Node is a type of data
 struct Node{
     int data;
     Node *next;
 };
 
-
-
+// Make a Head Node
+// Head is a pointer to the first node
+// Head is a global variable
 Node *Head;
 
+// Make a function to initialize the Head
+// Head is NULL
+// NULL because there is no node yet
 void init(){
     Head = NULL;
 }
 
+// Make a function to add a new node to the front of the list
+// The new node is added to the front of the list
+void addFront(int newData){
+    Node *newNode = new Node; // Create a new node
+    newNode->data = newData; // Assign the new data to the new node
+    newNode->next = NULL; // The next of the new node is NULL
+
+    // if the list is empty
+    if (Head == NULL) 
+    {
+        Head = newNode; // The new node is the first node
+        newNode->next = NULL;  // The next of the new node is NULL, because there is no node after it
+    }else{
+        // if the list is not empty
+        // the new node is added to the front of the list
+        newNode->next = Head; // The next of the new node is the Head
+        Head = newNode; // and the new node is the Head
+    }
+    cout << "New Data Has Been Added\n";
+}
 
 
-void tambahDepan(int dataBaru){
-    Node *baru = new Node;
-    baru->data = dataBaru;
-    baru->next = NULL;
+// Make a function to add a new node to the back of the list
+// The new node is added to the back of the list
+void addBack(int newData){
+    Node *newNode = new Node, *temp; // Create a new node and a temporary node
+    newNode->data = newData; // Assign the new data to the new node
+    newNode->next = NULL; // The next of the new node is NULL
+
+    // if the list is empty
+    if (Head == NULL){
+        Head = newNode; // The new node is the first node
+        newNode->next = NULL; // The next of the new node is NULL, because there is no node after it
+    }else{
+        // if the list is not empty
+        // the new node is added to the back of the list
+        temp = Head; // The temporary node is the Head
+        while (temp->next != NULL) // Find the last node
+        {
+            temp=temp->next; // Move to the next node
+        }
+        temp->next = newNode; // The next of the last node is the new node
+    }
+    cout << "New Data Has Been Added\n";
+}
+
+
+// Make a function to add a new node to the middle of the list
+// The new node is added to the middle of the list
+// The position of the new node is determined by the user
+void addMiddle(int newData, int posisi){
+    Node *temp = Head, *newNode = new Node; // Create a temporary node and a new node
+    newNode->data = newData; // Assign the new data to the new node
+    newNode->next = NULL; // The next of the new node is NULL
+
+    // if the list is empty
+    // the new node is added to the front of the list
     if (Head == NULL)
     {
-        Head = baru;
-        baru->next = NULL;  
+        Head = newNode; // The new node is the first node
+        newNode->next = NULL; // The next of the new node is NULL, because there is no node after it
     }else{
-        baru->next = Head;
-        Head = baru;
-    }
-    cout << "Data baru ditambahkan\n";
-}
-
-void tambahBelakang(int dataBaru){
-    Node *baru = new Node, *bantu;
-    baru->data = dataBaru;
-    baru->next = NULL;
-    if (Head == NULL){
-        Head = baru;
-    }else{
-        bantu = Head;
-        while (bantu->next != NULL)
-        {
-            bantu=bantu->next;   
+        // if the list is not empty
+        // the new node is added to the middle of the list
+        for (int i = 1; i < posisi - 1 && temp != NULL; i++) { // Find the position of the new node
+            temp = temp->next; // Move to the next node
         }
-        bantu->next = baru;
+        // if the position is not found
+        if (temp == NULL || temp->next == NULL) {
+            cout << "Position is Not Found\n";
+        } else { // if the position is found
+            newNode->next = temp->next; // The next of the new node is the next of the temporary node
+            temp->next = newNode; // The next of the temporary node is the new node
+        }
     }
-    cout << "Data baru ditambahkan\n";
+    cout << "New Data Has Been Added\n";
 }
 
-void tambahTengah(int dataBaru, int posisi){
-    Node *bantu = Head, *baru = new Node;
-    baru->data = dataBaru;
-    baru->next = NULL;
-    if (Head==NULL)
+
+// Make a function to show all data in the list
+// The data is shown from the first node to the last node
+void showData(){
+    Node *temp = Head; // Create a temporary node
+    if (Head==NULL) 
     {
-        cout << "Data kosong\n";
+        cout << "Data is Empty\n";
     }else{
-        for (int i = 1; i < posisi - 1 && bantu != NULL; i++) {
-            bantu = bantu->next;
-        }
-        if (bantu == NULL || bantu->next == NULL) {
-            cout << "Posisi tidak ditemukan\n";
-        } else {
-            baru->next = bantu->next;
-            bantu->next = baru;
-        }
-    }
-    cout << "Data baru ditambahkan\n";
-}
-
-void tampilkanData(){
-    Node *bantu = Head;
-    if (Head==NULL)
-    {
-        cout << "Data kosong\n";
-    }else{
-        while (bantu!=NULL)
+        while (temp!=NULL) // Show the data from the first node to the last node
         {
-            cout << bantu->data << " ";
-            bantu = bantu->next;
+            cout << temp->data << " ";
+            temp = temp->next; // Move to the next node
         }   
         cout << "\n";
     }
     
 }
 
-void hapusDepan(){
-    Node *bantu = Head;
+// Make a function to delete the first node
+void deleteFront(){
+    Node *deleteNode = Head; // Create a node to be deleted
     if (Head == NULL)
     {
-        cout << "Data kosong\n";
+        cout << "Data is Empty\n";
     }else{
-        Head = Head->next;
-        delete bantu;
+        // if the list is not empty
+        // the first node is deleted
+        Head = Head->next; // The Head is moved to next of the Head
+        delete deleteNode;
     }
-    cout << "Data paling depan terhapus\n";
+    cout << "Front data has been deleted\n";
 }
 
-void hapusbelakang(){
-    Node *bantu = Head, *hapus = new Node;
-    if (Head != NULL)
+// Make a function to delete the last node
+void deleteBack(){
+    Node *temp = Head, *deleteNode = new Node; // Create a temporary node and a node to be deleted
+    if (Head != NULL) // if the list is not empty
     {
-        while(bantu->next->next!=NULL){
-            bantu = bantu->next;
+        while(temp->next->next!=NULL){ // Find the last node
+            temp = temp->next;
         }
-        hapus = bantu->next;
-        bantu->next = NULL;
-        delete hapus;
-        cout << "Data paling belakang terhapus\n";
+
+        // after while loop, temp is the second last node
+        // the last node is the next of the second last node
+        deleteNode = temp->next; // The node to be deleted is the last node
+        temp->next = NULL; // The next of the second last node is NULL, because the last node is deleted
+        delete deleteNode;
+        cout << "The last data has been deleted\n";
         
     }else{
-        cout <<"data kosong";
+        cout <<"Data is Empty\n";
     }
 }
 
-void hapusSemua(){
-    Node *hapus;
-    while (Head != NULL) {
-        hapus = Head;
-        Head = Head->next;
-        cout << hapus->data << " dihapus\n";
-        delete hapus;
+// Make a function to delete all data in the list
+void deleteAll(){
+    Node *deleteNode; // Create a node to be deleted
+    while (Head != NULL) {  // Delete all data in the list
+        deleteNode = Head; // The node to be deleted is the Head
+        Head = Head->next; // The Head is moved to next of the Head
+        cout << deleteNode->data << " has been deleted\n"; // Show the data that has been deleted
+        delete deleteNode; // Delete the node
     }
-    cout << "Semua data terhapus\n";
+    cout << "All data has been deleted\n";
 }
 
 int main()
 {   
-    
-    init();
-    tampilkanData();
-    tambahDepan(90);
-    tambahDepan(10);
-    tambahBelakang(20);
-    tambahTengah(1,2);
-    tampilkanData();
-    hapusDepan();
-    tampilkanData();
-    hapusbelakang();
-    tampilkanData();
-    hapusSemua();
+    init(); // Initialize the Head
+    showData(); // Show the data in the list
+    addFront(90); // Add a new node to the front of the list
+    showData(); // Show the data in the list
+    addFront(10); // Add a new node to the front of the list
+    addBack(20); // Add a new node to the back of the list
+    showData(); // Show the data in the list
+    addMiddle(1, 2); // Add a new node to the middle of the list
+    showData(); // Show the data in the list
+    deleteFront(); // Delete the first node
+    showData(); // Show the data in the list
+    deleteBack(); // Delete the last node
+    showData(); // Show the data in the list
+    deleteAll(); // Delete all data in the list
 
     return 0;
 }
