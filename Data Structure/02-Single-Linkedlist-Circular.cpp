@@ -1,161 +1,170 @@
 #include <iostream>
 using namespace std;
 
-struct Node
-{
+// Define a Node structure for the Circular Single Linked List
+// Node has two attributes: data and next
+// data stores the value of the node
+// next is a pointer to the next node
+struct Node {
     int data;
     Node *next;
 };
 
+// Define a global pointer head to represent the start of the list
+// Initially, head is NULL, meaning the list is empty
 Node *head = NULL;
 
-void tambahDepan(int dataBaru){
-    Node *baru = new Node, *bantu;
-    baru->data = dataBaru;
-    baru->next = NULL;
-    if (head == NULL)
-    {
-        head = baru;
-        baru->next = head;
-    }else{
-        bantu = head;
-        while (bantu->next != head)
-        {
-            bantu = bantu->next;
+// Function to add a new node to the front of the list
+// The new node becomes the first node in the list
+void addFront(int newData) {
+    Node *newNode = new Node, *helper; // Create a new node and a helper pointer
+    newNode->data = newData; // Assign the new data to the new node
+    newNode->next = NULL; // Initialize the next pointer of the new node
+
+    // If the list is empty
+    if (head == NULL) {
+        head = newNode; // The new node becomes the head
+        newNode->next = head; // The next pointer points to itself, forming a circular structure
+    } else {
+        // If the list is not empty
+        helper = head; // Use helper to traverse the list
+        while (helper->next != head) { // Find the last node
+            helper = helper->next;
         }
-        baru->next = head;
-        head = baru;
-        bantu->next = head;
+        newNode->next = head; // The new node points to the current head
+        head = newNode; // Update head to the new node
+        helper->next = head; // The last node points to the new head
     }
-    cout << "Data berhasil ditambahkan\n";
+    cout << "Data added successfully\n";
 }
 
-void tambahBelakang(int dataBaru){
-    Node *baru = new Node, *bantu = head;
-    baru->data = dataBaru;
-    if(head == NULL){
-        head = baru;
-    }else{
-        do
-        {
-            bantu = bantu->next;
-        } while (bantu->next != head);
-        bantu->next = baru;
-        baru->next = head;
+// Function to add a new node to the back of the list
+// The new node becomes the last node in the list
+void addBack(int newData) {
+    Node *newNode = new Node, *helper = head; // Create a new node and a helper pointer
+    newNode->data = newData; // Assign the new data to the new node
+
+    // If the list is empty
+    if (head == NULL) {
+        head = newNode; // The new node becomes the head
+        newNode->next = head; // The next pointer points to itself, forming a circular structure
+    } else {
+        // If the list is not empty
+        do {
+            helper = helper->next; // Traverse the list to find the last node
+        } while (helper->next != head);
+        helper->next = newNode; // The last node points to the new node
+        newNode->next = head; // The new node points to the head
     }
-    cout << "Data berhasil ditambahkan\n";
+    cout << "Data added successfully\n";
 }
 
-void tambahTengah(int dataBaru, int posisi){
-    Node *baru = new Node, *bantu = head;
-    baru->data = dataBaru;
-    if(head == NULL){
-        head = baru;
-    }else{
-        for (int i = 1; i < posisi; i++)
-        {
-            bantu = bantu->next;
+// Function to add a new node at a specific position in the list
+// The position is determined by the user
+void addMiddle(int newData, int position) {
+    Node *newNode = new Node, *helper = head; // Create a new node and a helper pointer
+    newNode->data = newData; // Assign the new data to the new node
+
+    // If the list is empty
+    if (head == NULL) {
+        head = newNode; // The new node becomes the head
+        newNode->next = head; // The next pointer points to itself
+    } else {
+        // Traverse the list to find the position
+        for (int i = 1; i < position; i++) {
+            helper = helper->next;
         }
-        baru->next = bantu->next;
-        bantu->next = baru;
+        newNode->next = helper->next; // The new node points to the next node
+        helper->next = newNode; // The current node points to the new node
     }
-    cout << "Data berhasil ditambahkan\n";
+    cout << "Data added successfully\n";
 }
 
-
-void TampilkanData(){
-    Node *bantu = head;
-    if (head == NULL)
-    {
-        cout << "Data kosong kocak\n";
-    }else{
-
-
-        do
-        {
-
-            cout << bantu->data << " ";
-            bantu = bantu->next;
-
-        }while (bantu != head);
+// Function to display all data in the list
+// The data is displayed from the first node to the last node
+void displayData() {
+    Node *helper = head; // Create a helper pointer
+    if (head == NULL) {
+        cout << "No data available\n"; // If the list is empty
+    } else {
+        do {
+            cout << helper->data << " "; // Print the data of each node
+            helper = helper->next; // Move to the next node
+        } while (helper != head); // Stop when the head is reached again
     }
-    
     cout << "\n";
 }
 
-void hapusDepan(){
-    Node *hapus = head, *bantu = head;
-    if(head == NULL){
-        cout << "Data kosong\n";
-    }else{
-        do
-        {
-            bantu = bantu->next;
-        } while (bantu->next != head);
-        
+// Function to delete the first node in the list
+void deleteFront() {
+    Node *toDelete = head, *helper = head; // Create pointers for deletion and traversal
+    if (head == NULL) {
+        cout << "No data available\n"; // If the list is empty
+    } else {
+        do {
+            helper = helper->next; // Find the last node
+        } while (helper->next != head);
+        head = head->next; // Update head to the next node
+        helper->next = head; // The last node points to the new head
+        cout << "Front data deleted\n";
+        delete toDelete; // Delete the old head
     }
-    head = head->next;
-    bantu->next = head;
-    cout << "Data paling depan terhapus\n";
-    delete hapus;
 }
 
-void hapusBelakang(){
-    Node *bantu = head, *hapus;
-    if(head == NULL){
-        cout << "Data kosong\n";
-    }else{
-        while (bantu->next->next != head)
-        {
-            bantu = bantu->next;
+// Function to delete the last node in the list
+void deleteBack() {
+    Node *helper = head, *toDelete; // Create pointers for traversal and deletion
+    if (head == NULL) {
+        cout << "No data available\n"; // If the list is empty
+    } else {
+        while (helper->next->next != head) { // Find the second last node
+            helper = helper->next;
         }
-        hapus = bantu->next;
-        bantu->next = head;
-        cout << "Data paling belakang terhapus\n";
+        toDelete = helper->next; // The last node to be deleted
+        helper->next = head; // The second last node points to the head
+        cout << "Back data deleted\n";
+        delete toDelete; // Delete the last node
     }
 }
 
-void hapusSemua(){
-    Node *hapus, *bantu = head;
-    if(head == NULL){
-        cout << "Data kosong\n";
-    }else{
-        while (bantu->next != head){
-            bantu = bantu->next;
+// Function to delete all nodes in the list
+void deleteAll() {
+    Node *toDelete, *helper = head; // Create pointers for deletion and traversal
+    if (head == NULL) {
+        cout << "No data available\n"; // If the list is empty
+    } else {
+        while (helper->next != head) { // Find the last node
+            helper = helper->next;
         }
-        
-        do
-        {
-            hapus = head;
-            head = head->next;
-            bantu->next = head;
-            cout << hapus->data  << " ";
-            delete hapus;
-        }while (head != bantu);
-        hapus = head;
-        cout << hapus->data << "\n";
-        delete hapus;
-        head = NULL;
-        cout << "Semua data terhapus\n";
+        do {
+            toDelete = head; // The node to be deleted
+            head = head->next; // Move head to the next node
+            helper->next = head; // The last node points to the new head
+            cout << toDelete->data << " "; // Print the data of the deleted node
+            delete toDelete; // Delete the node
+        } while (head != helper); // Stop when only one node is left
+        toDelete = head; // Delete the last remaining node
+        cout << toDelete->data << "\n";
+        delete toDelete;
+        head = NULL; // The list is now empty
+        cout << "All data deleted\n";
     }
 }
 
+// Main function to demonstrate the operations on the Circular Single Linked List
+int main() {
+    addFront(1); // Add a node to the front
+    addFront(3); // Add another node to the front
+    addBack(2); // Add a node to the back
+    addBack(4); // Add another node to the back
+    addMiddle(5, 2); // Add a node at position 2
+    displayData(); // Display all data
+    deleteFront(); // Delete the first node
+    displayData(); // Display all data
+    deleteBack(); // Delete the last node
+    displayData(); // Display all data
+    deleteAll(); // Delete all nodes
+    displayData(); // Display all data
 
-int main()
-{
-
-    tambahDepan(1);
-    tambahDepan(3);
-    tambahBelakang(2);
-    tambahBelakang(4);
-    tambahTengah(5,2);
-    TampilkanData();
-    hapusDepan();
-    TampilkanData();
-    hapusBelakang();
-    TampilkanData();
-    hapusSemua();
-    TampilkanData();
-    
     return 0;
 }
